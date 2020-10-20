@@ -1,20 +1,17 @@
 {
-  "name": "twsproject1",
+  "name": "tws-tp1",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-      "start": "node index.js",
-      "test": "nodemon index.js"
+    "start": "node index.js",
+    "test": "nodemon index.js"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/laetitiadoerks/twsProject1.git"
-  },
-  "author": "Valentin et Laetitia",
+  "author": "Laetitia & Valentin",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/laetitiadoerks/twsProject1/issues"
-  },
-  "homepage": "https://github.com/laetitiadoerks/twsProject1#readme"
+  "dependencies": {
+    "axios": "^0.20.0",
+    "fast-xml-parser": "^3.17.4",
+    "uuid": "^8.3.1"
+  }
 }
