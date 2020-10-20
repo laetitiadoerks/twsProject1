@@ -21,8 +21,11 @@ function parseGPX(gpxFile) {
         let parsedPoint = {
             lat: Number(point.attrsMap["@_lat"]),
             lon: Number(point.attrsMap["@_lon"]),
-            ele: point.child.ele[0].val
+            ele: point.child.ele[0].val,
+            time: point.child.time[0].val
+            // time: Date(point.child.time[0].val)
         };
+        console.log(parsedPoint);
         parsedPoints.push(parsedPoint);
     });
 
