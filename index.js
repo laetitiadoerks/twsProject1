@@ -21,8 +21,10 @@ function parseGPX(gpxFile) {
         let parsedPoint = {
             lat: Number(point.attrsMap["@_lat"]),
             lon: Number(point.attrsMap["@_lon"]),
-            ele: point.child.ele[0].val
+            ele: point.child.ele[0].val,
+            time: point.child.time[0].val
         };
+        //console.log(parsedPoint);
         parsedPoints.push(parsedPoint);
     });
 
@@ -35,6 +37,7 @@ function generateGraphDBPoint(point) {
     schemeString += pointId + ' :lat ' + point.lat + ' .\n';
     schemeString += pointId + ' :lon ' + point.lon + ' .\n';
     schemeString += pointId + ' :ele ' + point.ele + ' .\n';
+    schemeString += pointId + ' :time ' + point.time + ' .\n';
 
     return {id: pointId, value: schemeString};
 }
