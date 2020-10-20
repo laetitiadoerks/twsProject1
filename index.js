@@ -23,6 +23,7 @@ function parseGPX(gpxFile) {
             lon: Number(point.attrsMap["@_lon"]),
             ele: point.child.ele[0].val,
             time: point.child.time[0].val
+            // time: Date(point.child.time[0].val)
         };
         //console.log(parsedPoint);
         parsedPoints.push(parsedPoint);
