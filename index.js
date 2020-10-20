@@ -3,6 +3,7 @@ const fs = require('fs');
 const {v4: uuid} = require('uuid');
 const axios = require('axios').default;
 
+//constances de base pour rdf
 const schemeHeader = "@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .\n" +
     "@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.\n" +
     "@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> . \n\n" +
@@ -11,11 +12,13 @@ const schemeHeader = "@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .\n" +
 
 console.log("TWS converter");
 
+//parsage des point gpx -> des trackpt
 function parseGPX(gpxFile) {
     let trackPoints = gpxFile.child.gpx[0].child.trk[0];
     let trackName = trackPoints.child.name[0].val;
     let points = trackPoints.child.trkseg[0].child.trkpt;
 
+    //boucle sur les pointd parser et on récupère les infos des points qu'on mets dans une liste et on retourne une track avec des points comme on veut
     let parsedPoints = [];
     points.forEach(point => {
         let parsedPoint = {
@@ -25,13 +28,13 @@ function parseGPX(gpxFile) {
             time: point.child.time[0].val
             // time: Date(point.child.time[0].val)
         };
-        //console.log(parsedPoint);
+        console.log(parsedPoint);
         parsedPoints.push(parsedPoint);
     });
 
     return {name: trackName, trackPoints: parsedPoints};
 }
-
+//creation d'un triple par points
 function generateGraphDBPoint(point) {
     let pointId = ':swt-trkpt-' + uuid();
     let schemeString = pointId + ' a :trkpt . \n';
@@ -43,6 +46,7 @@ function generateGraphDBPoint(point) {
     return {id: pointId, value: schemeString};
 }
 
+//creation de sequence de triple -> trk direct
 function generateGraphDBScheme(gpx) {
     let trackId = ':swt-trk-' + uuid();
     let pointsScheme = '';
@@ -64,6 +68,8 @@ function generateGraphDBScheme(gpx) {
     return schemeString;
 }
 
+
+//
 async function fetchOSMData(bounds) {
     let response = await axios.get('https://api.openstreetmap.org/api/0.6/map?bbox=' + bounds.bottomLeft.lon + ',' + bounds.bottomLeft.lat + ',' + bounds.topRight.lon + ',' + bounds.topRight.lat);
     let elements = response.data.elements;
