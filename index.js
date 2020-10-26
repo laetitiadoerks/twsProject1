@@ -57,7 +57,33 @@ function generateGraphDBPoint(point) {
     schemeString += pointId + ' :ele ' + point.ele + ' .\n';
     schemeString += pointId + ' :time ' + point.time + ' .\n';
 
+    if (point.poi) {
+      let generatedPOI = generateGraphDBPoi(point.poi);
+      schemeString += generatedPOI.value;
+      schemeString += pointId + ' :hasClosePOI ' + generatedPOI.id + ' .\n';
+    }
+
     return {id: pointId, value: schemeString};
+}
+
+function generateGraphDBPoi(poi) {
+    let poiId = ':swt-poi-' + poi.id;
+    let schemeString = poiId + ' a :POI . \n';
+    schemeString += poiId + ' :lat ' + poi.lat + ' .\n';
+    schemeString += poiId + ' :lon ' + poi.lon + ' .\n';
+    if (poi.tags.name) {
+        schemeString += poiId + ' :name "' + poi.tags.name + '" .\n';
+        if (poi.tags.tourism) {
+            schemeString += poiId + ' :type "tourism" .\n';
+        } else if (poi.tags.natural) {
+            schemeString += poiId + ' :type "natural" .\n';
+        } else if (poi.tags.amenity) {
+            schemeString += poiId + ' :type "amenity" .\n';
+        } else if (poi.tags.sport) {
+            schemeString += poiId + ' :type "sport" .\n';
+        }
+    }
+    return {id: poiId, value: schemeString};
 }
 
 //creation de sequence de triple -> trk direct
@@ -95,6 +121,7 @@ async function fetchOSMData(bounds) {
             }
         });
     }
+    console.log(filteredElements);
     return filteredElements;
 }
 
