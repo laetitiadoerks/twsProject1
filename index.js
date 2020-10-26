@@ -3,7 +3,7 @@ const fs = require('fs');
 const {v4: uuid} = require('uuid');
 const axios = require('axios').default;
 
-const sparqler = require('sparqling-star');
+var sparqler = require('sparqling-star');
 var myquery = new sparqler.Query();
 var album = {
     'type': 'dbo:Album',
