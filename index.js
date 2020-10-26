@@ -16,7 +16,6 @@ sparqler.send( myquery, function( error, data ) {
 });
 
 
-
 //constances de base pour rdf
 const schemeHeader = "@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .\n" +
     "@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.\n" +
