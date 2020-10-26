@@ -3,6 +3,20 @@ const fs = require('fs');
 const {v4: uuid} = require('uuid');
 const axios = require('axios').default;
 
+var sparqler = require('sparqling-star');
+var myquery = new sparqler.Query();
+var album = {
+    'type': 'dbo:Album',
+    'dbo:artist' : 'dbr:Eminem'
+};
+myquery.registerVariable( 'album', album );
+var sparqler = new sparqler.Client();
+sparqler.send( myquery, function( error, data ) {
+    console.log( data.results.bindings );
+});
+
+
+
 //constances de base pour rdf
 const schemeHeader = "@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .\n" +
     "@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.\n" +

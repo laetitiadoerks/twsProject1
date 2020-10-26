@@ -12,6 +12,7 @@
   "dependencies": {
     "axios": "^0.20.0",
     "fast-xml-parser": "^3.17.4",
+    "sparqling-star": "^1.1.0",
     "uuid": "^8.3.1"
   }
 }
