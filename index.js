@@ -3,7 +3,7 @@ const fs = require('fs');
 const {v4: uuid} = require('uuid');
 const axios = require('axios').default;
 
-var sparqler = require('sparqling-star');
+const sparqler = require('sparqling-star');
 var myquery = new sparqler.Query();
 var album = {
     'type': 'dbo:Album',
@@ -16,7 +16,8 @@ sparqler.send( myquery, function( error, data ) {
 });
 
 
-//constances de base pour rdf
+
+//constances de base pour rdfs
 const schemeHeader = "@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .\n" +
     "@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.\n" +
     "@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> . \n\n" +
@@ -56,33 +57,7 @@ function generateGraphDBPoint(point) {
     schemeString += pointId + ' :ele ' + point.ele + ' .\n';
     schemeString += pointId + ' :time ' + point.time + ' .\n';
 
-    if (point.poi) {
-        let generatedPOI = generateGraphDBPoi(point.poi);
-        schemeString += generatedPOI.value;
-        schemeString += pointId + ' :hasClosePOI ' + generatedPOI.id + ' .\n';
-    }
-
     return {id: pointId, value: schemeString};
-}
-
-function generateGraphDBPoi(poi) {
-    let poiId = ':swt-poi-' + poi.id;
-    let schemeString = poiId + ' a :POI . \n';
-    schemeString += poiId + ' :lat ' + poi.lat + ' .\n';
-    schemeString += poiId + ' :lon ' + poi.lon + ' .\n';
-    if (poi.tags.name) {
-        schemeString += poiId + ' :name "' + poi.tags.name + '" .\n';
-        if (poi.tags.tourism) {
-            schemeString += poiId + ' :type "tourism" .\n';
-        } else if (poi.tags.natural) {
-            schemeString += poiId + ' :type "natural" .\n';
-        } else if (poi.tags.amenity) {
-            schemeString += poiId + ' :type "amenity" .\n';
-        } else if (poi.tags.sport) {
-            schemeString += poiId + ' :type "sport" .\n';
-        }
-    }
-    return {id: poiId, value: schemeString};
 }
 
 //creation de sequence de triple -> trk direct
@@ -120,7 +95,6 @@ async function fetchOSMData(bounds) {
             }
         });
     }
-    console.log(filteredElements);
     return filteredElements;
 }
 
@@ -181,6 +155,8 @@ function distanceBetweenPoints(lat1, lon1, lat2, lon2) {
 function toRad(Value) {
     return Value * Math.PI / 180;
 }
+
+
 
 fs.readFile('gpx/4sDDFdd4cjA.gpx', 'utf8', function (err, data) {
     if (err) {
