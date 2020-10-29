@@ -54,7 +54,7 @@ function generateGraphDBPoint(point) {
     schemeString += pointId + ' :lat ' + point.lat + ' .\n';
     schemeString += pointId + ' :lon ' + point.lon + ' .\n';
     schemeString += pointId + ' :ele ' + point.ele + ' .\n';
-    schemeString += pointId + ' :time ' + point.time + ' .\n';
+    schemeString += pointId + ' :time \"' + point.time + '\" .\n';
 
     if (point.poi) {
       let generatedPOI = generateGraphDBPoi(point.poi);
