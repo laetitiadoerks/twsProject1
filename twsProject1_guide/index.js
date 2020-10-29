@@ -17,7 +17,7 @@ sparqler.send( myquery, function( error, data ) {
 console.log('a');
 console.log(myquery);
 
-// 
+// QUERY DES POIs
 // PREFIX : <http://cui.unige.ch/>
 // prefix xsd: <http://www.w3.org/2001/XMLSchema#>
 // prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
@@ -27,4 +27,17 @@ console.log(myquery);
 //
 // select * where {
 // 	?s a cui:POI.
+// }
+
+// QUERY DES NAME DE POIs
+// PREFIX : <http://cui.unige.ch/>
+// prefix xsd: <http://www.w3.org/2001/XMLSchema#>
+// prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+// prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+//
+// prefix cui: <http://cui.unige.ch/>
+//
+// select * where {
+// 	?s a cui:POI.
+//     ?s :name ?o .
 // }
