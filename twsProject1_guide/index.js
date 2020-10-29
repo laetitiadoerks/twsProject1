@@ -1,3 +1,7 @@
+const parser = require('fast-xml-parser');
+const fs = require('fs');
+const {v4: uuid} = require('uuid');
+
 var sparqler = require('sparqling-star');
 var sparqler = new sparqler.Client();
 
