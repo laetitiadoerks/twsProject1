@@ -27,11 +27,11 @@ var sparqler = new sparqler.Client();
  */
 
 // query sur les alentours des tracks
-var myquery = 'SELECT DISTINCT * WHERE { ?s geo:lat ?la . ?s geo:long ?lo . FILTER(?la>48.85 AND ?la<48.86 AND ?lo>2.351 AND ?lo<2.352) . } LIMIT 100';
+var myquery = 'SELECT DISTINCT * WHERE { ?s geo:lat ?la . ?s geo:long ?lo . FILTER(?la>45.7970 AND ?la<45.8096 AND ?lo>6.3874 AND ?lo<6.4250) . }';
 sparqler.send( myquery, function( error, data ) {
     // console.log( data.results.bindings );
 });
-console.log('a');
+console.log('dbpedia query');
 console.log(myquery);
 
 
