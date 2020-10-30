@@ -185,6 +185,7 @@ files.forEach(track => {
             linkPOIsNearTrack(parsedGpx.trackPoints, osmPOIs)
             let scheme = generateGraphDBScheme(parsedGpx);
             console.log(files.indexOf(track));
+            console.log(bounds);
             fs.writeFile('gpx' + files.indexOf(track) + '.ttl', scheme, function (err) {
                 if (err) throw err;
                 console.log('Saved!');
