@@ -88,7 +88,7 @@ const allTrackName = prefix +
     "?s cui:name ?trk." +
     "}";
 
-var resAllTrackName = [];
+const resAllTrackName = [];
 vari = '';
 
 async function getAllTrackName() {
@@ -112,6 +112,7 @@ async function getAllTrackName() {
                 // console.log(data);
             });
             // console.log(resAllPOIsByTrack);
+            // return resAllTrackName;
 };
 getAllTrackName().then();
 
@@ -120,36 +121,61 @@ getAllTrackName().then();
 // query pour récuperer tous les pois par track
 
 // const allPOIsByTrackTT = "PREFIX : <http://cui.unige.ch/> prefix xsd: <http://www.w3.org/2001/XMLSchema#> prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> prefix cui: <http://cui.unige.ch/> select * where { ?s a cui:trk. ?s :name ?o. ?poi a cui:POI. ?t a cui:trkpt. ?t cui:hasClosePOI ?poi. ?s cui:trackpoints ?t. ?poi cui:lat ?lat. ?poi cui:lon ?lon. }";
-const allPOIsByTrack = prefix +
-    "select ?trk ?namepoi ?lat ?lon where {" +
-	"?s a cui:trk." +
-    "?s cui:name ?trk." +
-    "?poi a cui:POI." +
-    "?t a cui:trkpt." +
-    "?t cui:hasClosePOI ?poi." +
-    "?s cui:trackpoints ?t." +
-    "?poi cui:lat ?lat." +
-    "?poi cui:lon ?lon." +
-    "?poi cui:name ?namepoi" +
-    "}";
-
-var resAllPOIsByTrack ='';
 
 
-async function getAllPOIsByTrack() {
+var resAllPOIsByTrack = [];
+var vara ='';
+var tempo ='';
+
+async function getAllPOIsByTrack(trackname) {
     // const allPOIsByTrack = "PREFIX : <http://cui.unige.ch/> prefix xsd: <http://www.w3.org/2001/XMLSchema#> prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> prefix cui: <http://cui.unige.ch/> select * where { ?s a cui:trk. ?s :name ?o. ?poi a cui:POI. ?t a cui:trkpt. ?t cui:hasClosePOI ?poi. ?s cui:trackpoints ?t. ?poi cui:lat ?lat. ?poi cui:lon ?lon. }";
-
+    var trackname2 = 'Refuge Maison Vieille - Refuge Bertone';
+    // console.log(trackname);
+    const allPOIsByTrack = prefix +
+        "select ?namepoi ?lat ?lon where {" +
+    	"?s a cui:trk." +
+        "?s cui:name \"" + trackname2 + "\"." +
+        "?poi a cui:POI." +
+        "?t a cui:trkpt." +
+        "?t cui:hasClosePOI ?poi." +
+        "?s cui:trackpoints ?t." +
+        "?poi cui:lat ?lat." +
+        "?poi cui:lon ?lon." +
+        "?poi cui:name ?namepoi" +
+        "}";
     await graphdb.Query.query(allPOIsByTrack, (err, data) => {
                 // console.log(data);
                 // const obj = JSON.parse(data)
                 // console.log(obj.poi);
-                resAllPOIsByTrack += data;
+                tempo += data;
                 // console.log(typeof(data));
-                // console.log(data);
-            });
+                // // console.log(data);
+                // const b = JSON.parse(data);
+                // console.log(b);
+                // b.results.bindings.forEach((name, a) => {
+                //     // console.log(i.results.bindings[a].trk.value);
+                //     vara = b.results.bindings[a].trk.value;
+                //     resAllTrackName.push(vara);
+
+                });
+            // });
             // console.log(resAllPOIsByTrack);
+            console.log(typeof(tempo));
+            console.log(tempo);
+            const b = JSON.parse(tempo);
+            console.log(b);
+            // b.results.bindings.forEach((name, a) => {
+            //     // console.log(i.results.bindings[a].trk.value);
+            //     vara = b.results.bindings[a].trk.value;
+            //     resAllTrackName.push(vara);
+            // });
+// getAllTrackName().then(tracknames =>{
+//     console.log('a');
+//     console.log(tracknames[1]);
+//     getAllPOIsByTrack(tracknames[1]).then();
 };
-getAllPOIsByTrack().then();
+
+getAllPOIsByTrack(resAllTrackName[0]).then()
 
 
 // QUERY de tous les POIs groupe par track
@@ -229,57 +255,57 @@ server.on('request', (request, response) => {
   response.write('<h2>Premier itinéraire</h2>');
   response.write('<h3>' + resAllTrackName[0] + '</h3>');
   response.write('<p>');
-  response.write(resAllPOIsByTrack);
+  response.write(tempo);
   response.write('</p>');
 
 
   response.write('<h2>Second itinéraire</h2>');
   response.write('<h3>' + resAllTrackName[1] + '</h3>');
   response.write('<p>');
-  response.write(resAllPOIsByTrack);
+  response.write(tempo);
   response.write('</p>');
 
 
-  response.write('<h2>Troisième itinéraire</h2>');
-  response.write('<h3>' + resAllTrackName[2] + '</h3>');
-  response.write('<p>');
-  response.write(resAllPOIsByTrack);
-  response.write('</p>');
-
-
-  response.write('<h2>Qutrième itinéraire</h2>');
-  response.write('<h3>' + resAllTrackName[3] + '</h3>');
-  response.write('<p>');
-  response.write(resAllPOIsByTrack);
-  response.write('</p>');
-
-
-  response.write('<h2>Cinquième itinéraire</h2>');
-  response.write('<h3>' + resAllTrackName[4] + '</h3>');
-  response.write('<p>');
-  response.write(resAllPOIsByTrack);
-  response.write('</p>');
-
-
-  response.write('<h2>Sixième itinéraire</h2>');
-  response.write('<h3>' + resAllTrackName[5] + '</h3>');
-  response.write('<p>');
-  response.write(resAllPOIsByTrack);
-  response.write('</p>');
-
-
-  response.write('<h2>Septième itinéraire</h2>');
-  response.write('<h3>' + resAllTrackName[6] + '</h3>');
-  response.write('<p>');
-  response.write(resAllPOIsByTrack);
-  response.write('</p>');
-
-
-  response.write('<h2>Huitième itinéraire</h2>');
-  response.write('<h3>' + resAllTrackName[7] + '</h3>');
-  response.write('<p>');
-  response.write(resAllPOIsByTrack);
-  response.write('</p>');
+  // response.write('<h2>Troisième itinéraire</h2>');
+  // response.write('<h3>' + resAllTrackName[2] + '</h3>');
+  // response.write('<p>');
+  // response.write(resAllPOIsByTrack);
+  // response.write('</p>');
+  //
+  //
+  // response.write('<h2>Qutrième itinéraire</h2>');
+  // response.write('<h3>' + resAllTrackName[3] + '</h3>');
+  // response.write('<p>');
+  // response.write(resAllPOIsByTrack);
+  // response.write('</p>');
+  //
+  //
+  // response.write('<h2>Cinquième itinéraire</h2>');
+  // response.write('<h3>' + resAllTrackName[4] + '</h3>');
+  // response.write('<p>');
+  // response.write(resAllPOIsByTrack);
+  // response.write('</p>');
+  //
+  //
+  // response.write('<h2>Sixième itinéraire</h2>');
+  // response.write('<h3>' + resAllTrackName[5] + '</h3>');
+  // response.write('<p>');
+  // response.write(resAllPOIsByTrack);
+  // response.write('</p>');
+  //
+  //
+  // response.write('<h2>Septième itinéraire</h2>');
+  // response.write('<h3>' + resAllTrackName[6] + '</h3>');
+  // response.write('<p>');
+  // response.write(resAllPOIsByTrack);
+  // response.write('</p>');
+  //
+  //
+  // response.write('<h2>Huitième itinéraire</h2>');
+  // response.write('<h3>' + resAllTrackName[7] + '</h3>');
+  // response.write('<p>');
+  // response.write(resAllPOIsByTrack);
+  // response.write('</p>');
 
 
   response.end();
