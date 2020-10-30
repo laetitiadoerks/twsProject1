@@ -37,6 +37,7 @@ function parseGPX(gpxFile) {
 }
 //creation d'un triple par points
 function generateGraphDBPoint(point) {
+  // console.log(point);
     let pointId = ':swt-trkpt-' + uuid();
     let schemeString = pointId + ' a :trkpt . \n';
     schemeString += pointId + ' :lat ' + point.lat + ' .\n';
@@ -45,15 +46,24 @@ function generateGraphDBPoint(point) {
     schemeString += pointId + ' :time \"' + point.time + '\" .\n';
 
     if (point.poi) {
-      let generatedPOI = generateGraphDBPoi(point.poi);
-      schemeString += generatedPOI.value;
-      schemeString += pointId + ' :hasClosePOI ' + generatedPOI.id + ' .\n';
+      point.poi.forEach((poi) => {
+        let generatedPOI = generateGraphDBPoi(poi);
+        schemeString += generatedPOI.value;
+        schemeString += pointId + ' :hasClosePOI ' + generatedPOI.id + ' .\n';
+      });
+
+      // let generatedPOI = generateGraphDBPoi(point.poi);
+      // schemeString += generatedPOI.value;
+      // schemeString += pointId + ' :hasClosePOI ' + generatedPOI.id + ' .\n';
     }
 
     return {id: pointId, value: schemeString};
 }
 
 function generateGraphDBPoi(poi) {
+  // console.log('a');
+  // console.log(poi);
+  // console.log('b');
     let poiId = ':swt-poi-' + poi.id;
     let schemeString = poiId + ' a :POI . \n';
     schemeString += poiId + ' :lat ' + poi.lat + ' .\n';
@@ -80,6 +90,7 @@ function generateGraphDBScheme(gpx) {
     let pointsScheme = '';
     let pointIds = [];
     gpx.trackPoints.forEach((point) => {
+      // console.log(point);
         let graphDbPoint = generateGraphDBPoint(point);
         pointsScheme += graphDbPoint.value + "\n";
         pointIds.push(graphDbPoint.id);
@@ -135,19 +146,33 @@ function findBounds(points) {
 }
 
 function linkPOIsNearTrack(points, pois) {
+  // console.log(points);
+  // console.log('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+  // console.log(pois);
     pois.forEach(poi => {
         let nearestPoint;
         let nearestDistance = Number.MAX_VALUE;
+        // console.log(nearestDistance);
 
         points.forEach(point => {
             let distance = distanceBetweenPoints(point.lat, point.lon, poi.lat, poi.lon);
             if (distance < 0.5 && distance < nearestDistance) {
+              // console.log('point');
+              // console.log(point);
+              // console.log('POI');
+              // console.log(poi);
                 nearestPoint = point;
                 nearestDistance = distance;
             }
         });
         if (nearestPoint) {
-            nearestPoint.poi = poi;
+            // nearestPoint.poi = poi;
+            if (nearestPoint.poi){
+              nearestPoint.poi.push(poi);
+            }
+            else {
+              nearestPoint.poi = [];
+            }
         }
     });
 }
@@ -172,6 +197,7 @@ function toRad(Value) {
 }
 
 var files = ['4sDDFdd4cjA', 'btSeByOExEc', 'kmrcRbHcMpg', 'PO21QxqG2co', 'pRAjjKqHwzQ', 'rx1-4gf5lts', 'tIRn_qJSB5s', 'UAQjXL9WRKY'];
+// var files = ['4sDDFdd4cjA'];
 
 files.forEach(track => {
     fs.readFile('gpx/' + track + '.gpx', 'utf8', function (err, data) {
