@@ -59,7 +59,8 @@ function generateGraphDBPoi(poi) {
     schemeString += poiId + ' :lat ' + poi.lat + ' .\n';
     schemeString += poiId + ' :lon ' + poi.lon + ' .\n';
     if (poi.tags.name) {
-        schemeString += poiId + ' :name "' + poi.tags.name + '" .\n';
+        let name = poi.tags.name.replace(/\"/g, "");
+        schemeString += poiId + ' :name "' + name + '" .\n';
         if (poi.tags.tourism) {
             schemeString += poiId + ' :type "tourism" .\n';
         } else if (poi.tags.natural) {
