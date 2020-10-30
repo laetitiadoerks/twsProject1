@@ -26,6 +26,10 @@ var sparqler = new sparqler.Client();
  *
  */
 
+ /*
+ *TODO: faire la requete dbpedia pour chaqune des tracks
+ */
+
 // query sur les alentours des tracks
 var myquery = 'SELECT DISTINCT * WHERE { ?s geo:lat ?la . ?s geo:long ?lo . FILTER(?la>45.7970 AND ?la<45.8096 AND ?lo>6.3874 AND ?lo<6.4250) . }';
 sparqler.send( myquery, function( error, data ) {
@@ -68,16 +72,6 @@ graphdb.Query.query(allPOIsName, (err, data) => {
     // console.log(err);
 });
 
-//plus utile
-// var select2 = "PREFIX : <http://cui.unige.ch/> prefix xsd: <http://www.w3.org/2001/XMLSchema#> prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> prefix cui: <http://cui.unige.ch/> select * where { ?s a cui:trk. ?s :name ?o. ?poi a cui:POI. ?t a cui:trkpt. ?t cui:hasClosePOI ?poi. ?s cui:trackpoints ?t. ?poi cui:lat ?lat. ?poi cui:lon ?lon. }";
-//
-// graphdb.Query.query(select2, (err, data) => {
-//     resAllPOIsByTrack = data;
-//     console.log(typeof(data));
-//     // console.log(data);
-//     // console.log(err);
-// });
-// var select2 = "PREFIX : <http://cui.unige.ch/> prefix xsd: <http://www.w3.org/2001/XMLSchema#> prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> prefix cui: <http://cui.unige.ch/> select * where { ?s a cui:trk. ?s :name ?o. ?poi a cui:POI. ?t a cui:trkpt. ?t cui:hasClosePOI ?poi. ?s cui:trackpoints ?t. ?poi cui:lat ?lat. ?poi cui:lon ?lon. }";
 
 
 // query pour récupérer tous les trackname
@@ -120,13 +114,15 @@ getAllTrackName().then();
 
 // query pour récuperer tous les pois par track
 
-// const allPOIsByTrackTT = "PREFIX : <http://cui.unige.ch/> prefix xsd: <http://www.w3.org/2001/XMLSchema#> prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> prefix cui: <http://cui.unige.ch/> select * where { ?s a cui:trk. ?s :name ?o. ?poi a cui:POI. ?t a cui:trkpt. ?t cui:hasClosePOI ?poi. ?s cui:trackpoints ?t. ?poi cui:lat ?lat. ?poi cui:lon ?lon. }";
-
 
 var resAllPOIsByTrack = [];
 var vara ='';
 var tempo ='';
 
+/*
+*TODO: le faire pour la liste des trackname
+*enlever lon et lat de la query
+*/
 async function getAllPOIsByTrack(trackname) {
     // const allPOIsByTrack = "PREFIX : <http://cui.unige.ch/> prefix xsd: <http://www.w3.org/2001/XMLSchema#> prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> prefix cui: <http://cui.unige.ch/> select * where { ?s a cui:trk. ?s :name ?o. ?poi a cui:POI. ?t a cui:trkpt. ?t cui:hasClosePOI ?poi. ?s cui:trackpoints ?t. ?poi cui:lat ?lat. ?poi cui:lon ?lon. }";
     var trackname2 = 'Refuge Maison Vieille - Refuge Bertone';
@@ -148,34 +144,40 @@ async function getAllPOIsByTrack(trackname) {
                 // const obj = JSON.parse(data)
                 // console.log(obj.poi);
                 tempo += data;
-                // console.log(typeof(data));
-                // // console.log(data);
-                // const b = JSON.parse(data);
-                // console.log(b);
+                console.log('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+                console.log(typeof(tempo));
+                // console.log(tempo);
+                // const b = JSON.parse(tempo);
+                // // console.log(b);
                 // b.results.bindings.forEach((name, a) => {
                 //     // console.log(i.results.bindings[a].trk.value);
                 //     vara = b.results.bindings[a].trk.value;
                 //     resAllTrackName.push(vara);
 
-                });
-            // });
-            // console.log(resAllPOIsByTrack);
-            console.log(typeof(tempo));
-            console.log(tempo);
-            const b = JSON.parse(tempo);
-            console.log(b);
-            // b.results.bindings.forEach((name, a) => {
-            //     // console.log(i.results.bindings[a].trk.value);
-            //     vara = b.results.bindings[a].trk.value;
-            //     resAllTrackName.push(vara);
-            // });
-// getAllTrackName().then(tracknames =>{
-//     console.log('a');
-//     console.log(tracknames[1]);
-//     getAllPOIsByTrack(tracknames[1]).then();
-};
+                // });
+            });
+            /*
+            *TODO: faire tableau de poi pour une track
+            */
+            setTimeout(function(){
+                const b = JSON.parse(tempo);
+                console.log('b');
+                console.log(typeof(b));
+                b.results.bindings.forEach((name, a) => {
+                   // console.log(b.results.bindings[a].lon.value); -> pas utile pour le retour a l'utilisateur
+                   console.log(b.results.bindings[a].namepoi.value);
+                   // console.log(b.results.bindings[a].lat.value); -> pas utile pour le retour a l'utilisateur
+                   vara = b.results.bindings[a];
+                   resAllPOIsByTrack.push(vara);
+                   });
+                }, 2000);
 
-getAllPOIsByTrack(resAllTrackName[0]).then()
+
+};
+setTimeout(function(){
+    getAllPOIsByTrack(resAllTrackName[0]).then()
+    }, 2000);
+// getAllPOIsByTrack(resAllTrackName[0]).then()
 
 
 // QUERY de tous les POIs groupe par track
@@ -266,46 +268,46 @@ server.on('request', (request, response) => {
   response.write('</p>');
 
 
-  // response.write('<h2>Troisième itinéraire</h2>');
-  // response.write('<h3>' + resAllTrackName[2] + '</h3>');
-  // response.write('<p>');
-  // response.write(resAllPOIsByTrack);
-  // response.write('</p>');
-  //
-  //
-  // response.write('<h2>Qutrième itinéraire</h2>');
-  // response.write('<h3>' + resAllTrackName[3] + '</h3>');
-  // response.write('<p>');
-  // response.write(resAllPOIsByTrack);
-  // response.write('</p>');
-  //
-  //
-  // response.write('<h2>Cinquième itinéraire</h2>');
-  // response.write('<h3>' + resAllTrackName[4] + '</h3>');
-  // response.write('<p>');
-  // response.write(resAllPOIsByTrack);
-  // response.write('</p>');
-  //
-  //
-  // response.write('<h2>Sixième itinéraire</h2>');
-  // response.write('<h3>' + resAllTrackName[5] + '</h3>');
-  // response.write('<p>');
-  // response.write(resAllPOIsByTrack);
-  // response.write('</p>');
-  //
-  //
-  // response.write('<h2>Septième itinéraire</h2>');
-  // response.write('<h3>' + resAllTrackName[6] + '</h3>');
-  // response.write('<p>');
-  // response.write(resAllPOIsByTrack);
-  // response.write('</p>');
-  //
-  //
-  // response.write('<h2>Huitième itinéraire</h2>');
-  // response.write('<h3>' + resAllTrackName[7] + '</h3>');
-  // response.write('<p>');
-  // response.write(resAllPOIsByTrack);
-  // response.write('</p>');
+  response.write('<h2>Troisième itinéraire</h2>');
+  response.write('<h3>' + resAllTrackName[2] + '</h3>');
+  response.write('<p>');
+  response.write(resAllPOIsByTrack);
+  response.write('</p>');
+
+
+  response.write('<h2>Qutrième itinéraire</h2>');
+  response.write('<h3>' + resAllTrackName[3] + '</h3>');
+  response.write('<p>');
+  response.write(resAllPOIsByTrack);
+  response.write('</p>');
+
+
+  response.write('<h2>Cinquième itinéraire</h2>');
+  response.write('<h3>' + resAllTrackName[4] + '</h3>');
+  response.write('<p>');
+  response.write(resAllPOIsByTrack);
+  response.write('</p>');
+
+
+  response.write('<h2>Sixième itinéraire</h2>');
+  response.write('<h3>' + resAllTrackName[5] + '</h3>');
+  response.write('<p>');
+  response.write(resAllPOIsByTrack);
+  response.write('</p>');
+
+
+  response.write('<h2>Septième itinéraire</h2>');
+  response.write('<h3>' + resAllTrackName[6] + '</h3>');
+  response.write('<p>');
+  response.write(resAllPOIsByTrack);
+  response.write('</p>');
+
+
+  response.write('<h2>Huitième itinéraire</h2>');
+  response.write('<h3>' + resAllTrackName[7] + '</h3>');
+  response.write('<p>');
+  response.write(resAllPOIsByTrack);
+  response.write('</p>');
 
 
   response.end();
