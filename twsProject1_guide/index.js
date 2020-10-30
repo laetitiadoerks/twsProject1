@@ -215,9 +215,64 @@ server.on('request', (request, response) => {
   const content_type = 'text/html; charset=utf-8';
   response.setHeader('Content-Type', content_type); // (1)
 
-  response.write('<h1>Salut à toi</h1>');
+  response.write('<h1>Guide touristique des alentours des Montagnes autour du Mont Blanc</h1>');
+
+  response.write('<h2>Premier itinéraire</h2>');
+  response.write('<h3>trackName</h3>');
+  response.write(resAllTrackName);
   response.write('<p>');
-  response.write(essai);
+  response.write(resAllPOIsByTrack);
+  response.write('</p>');
+
+
+  response.write('<h2>Second itinéraire</h2>');
+  response.write('<h3>trackName</h3>');
   response.write('<p>');
+  response.write(resAllPOIsByTrack);
+  response.write('</p>');
+
+
+  response.write('<h2>Troisième itinéraire</h2>');
+  response.write('<h3>trackName</h3>');
+  response.write('<p>');
+  response.write(resAllPOIsByTrack);
+  response.write('</p>');
+
+
+  response.write('<h2>Qutrième itinéraire</h2>');
+  response.write('<h3>trackName</h3>');
+  response.write('<p>');
+  response.write(resAllPOIsByTrack);
+  response.write('</p>');
+
+
+  response.write('<h2>Cinquième itinéraire</h2>');
+  response.write('<h3>trackName</h3>');
+  response.write('<p>');
+  response.write(resAllPOIsByTrack);
+  response.write('</p>');
+
+
+  response.write('<h2>Sixième itinéraire</h2>');
+  response.write('<h3>trackName</h3>');
+  response.write('<p>');
+  response.write(resAllPOIsByTrack);
+  response.write('</p>');
+
+
+  response.write('<h2>Septième itinéraire</h2>');
+  response.write('<h3>trackName</h3>');
+  response.write('<p>');
+  response.write(resAllPOIsByTrack);
+  response.write('</p>');
+
+
+  response.write('<h2>Huitième itinéraire</h2>');
+  response.write('<h3>trackName</h3>');
+  response.write('<p>');
+  response.write(resAllPOIsByTrack);
+  response.write('</p>');
+
+
   response.end();
 });
