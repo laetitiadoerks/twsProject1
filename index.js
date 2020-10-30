@@ -29,7 +29,7 @@ function parseGPX(gpxFile) {
             time: point.child.time[0].val
             // time: Date(point.child.time[0].val)
         };
-        console.log(parsedPoint);
+        //console.log(parsedPoint);
         parsedPoints.push(parsedPoint);
     });
 
@@ -108,7 +108,7 @@ async function fetchOSMData(bounds) {
             }
         });
     }
-    console.log(filteredElements);
+    //console.log(filteredElements);
     return filteredElements;
 }
 
@@ -170,24 +170,25 @@ function toRad(Value) {
     return Value * Math.PI / 180;
 }
 
+var files = ['4sDDFdd4cjA', 'btSeByOExEc', 'kmrcRbHcMpg', 'PO21QxqG2co', 'pRAjjKqHwzQ', 'rx1-4gf5lts', 'tIRn_qJSB5s', 'UAQjXL9WRKY'];
 
+files.forEach(track => {
+    fs.readFile('gpx/' + track + '.gpx', 'utf8', function (err, data) {
+        if (err) {
+            return console.log(err);
+        }
+        let root = parser.getTraversalObj(data, {ignoreAttributes: false});
+        let parsedGpx = parseGPX(root);
+        let bounds = findBounds(parsedGpx.trackPoints);
+        fetchOSMData(bounds).then(osmPOIs => {
+            linkPOIsNearTrack(parsedGpx.trackPoints, osmPOIs)
+            let scheme = generateGraphDBScheme(parsedGpx);
+            console.log(files.indexOf(track));
+            fs.writeFile('gpx' + files.indexOf(track) + '.ttl', scheme, function (err) {
+                if (err) throw err;
+                console.log('Saved!');
+            });
 
-fs.readFile('gpx/4sDDFdd4cjA.gpx', 'utf8', function (err, data) {
-    if (err) {
-        return console.log(err);
-    }
-    let root = parser.getTraversalObj(data, {ignoreAttributes: false});
-    let parsedGpx = parseGPX(root);
-    let bounds = findBounds(parsedGpx.trackPoints);
-    fetchOSMData(bounds).then(osmPOIs => {
-        linkPOIsNearTrack(parsedGpx.trackPoints, osmPOIs)
-        //TODO: generate scheme with linked POIs
-        let scheme = generateGraphDBScheme(parsedGpx);
-        fs.writeFile('gpx.ttl', scheme, function (err) {
-            if (err) throw err;
-            console.log('Saved!');
         });
-
     });
-
 });
