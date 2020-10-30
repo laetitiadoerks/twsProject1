@@ -13,6 +13,7 @@
     "axios": "^0.20.0",
     "fast-xml-parser": "^3.17.4",
     "graphdb-js": "^1.0.2",
+    "nodemon": "^2.0.6",
     "sparqling-star": "^1.1.0",
     "uuid": "^8.3.1"
   }
