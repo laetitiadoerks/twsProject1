@@ -88,18 +88,27 @@ const allTrackName = prefix +
     "?s cui:name ?trk." +
     "}";
 
-var resAllTrackName ='';
-
+var resAllTrackName = [];
+vari = '';
 
 async function getAllTrackName() {
     // const allPOIsByTrack = "PREFIX : <http://cui.unige.ch/> prefix xsd: <http://www.w3.org/2001/XMLSchema#> prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> prefix cui: <http://cui.unige.ch/> select * where { ?s a cui:trk. ?s :name ?o. ?poi a cui:POI. ?t a cui:trkpt. ?t cui:hasClosePOI ?poi. ?s cui:trackpoints ?t. ?poi cui:lat ?lat. ?poi cui:lon ?lon. }";
 
     await graphdb.Query.query(allTrackName, (err, data) => {
-                // console.log(data);
+                // console.log(data[125]);
+                const i = JSON.parse(data);
                 // const obj = JSON.parse(data)
                 // console.log(obj.poi);
-                resAllTrackName += data;
-                // console.log(typeof(data));
+                // resAllTrackName += data;
+                // console.log(typeof(i));
+                // console.log(i.results.bindings[1].trk.value);
+                i.results.bindings.forEach((name, a) => {
+                    // console.log(i.results.bindings[a].trk.value);
+                    vari = i.results.bindings[a].trk.value;
+                    resAllTrackName.push(vari);
+
+                });
+
                 // console.log(data);
             });
             // console.log(resAllPOIsByTrack);
@@ -218,57 +227,56 @@ server.on('request', (request, response) => {
   response.write('<h1>Guide touristique des alentours des Montagnes autour du Mont Blanc</h1>');
 
   response.write('<h2>Premier itinéraire</h2>');
-  response.write('<h3>trackName</h3>');
-  response.write(resAllTrackName);
+  response.write('<h3>' + resAllTrackName[0] + '</h3>');
   response.write('<p>');
   response.write(resAllPOIsByTrack);
   response.write('</p>');
 
 
   response.write('<h2>Second itinéraire</h2>');
-  response.write('<h3>trackName</h3>');
+  response.write('<h3>' + resAllTrackName[1] + '</h3>');
   response.write('<p>');
   response.write(resAllPOIsByTrack);
   response.write('</p>');
 
 
   response.write('<h2>Troisième itinéraire</h2>');
-  response.write('<h3>trackName</h3>');
+  response.write('<h3>' + resAllTrackName[2] + '</h3>');
   response.write('<p>');
   response.write(resAllPOIsByTrack);
   response.write('</p>');
 
 
   response.write('<h2>Qutrième itinéraire</h2>');
-  response.write('<h3>trackName</h3>');
+  response.write('<h3>' + resAllTrackName[3] + '</h3>');
   response.write('<p>');
   response.write(resAllPOIsByTrack);
   response.write('</p>');
 
 
   response.write('<h2>Cinquième itinéraire</h2>');
-  response.write('<h3>trackName</h3>');
+  response.write('<h3>' + resAllTrackName[4] + '</h3>');
   response.write('<p>');
   response.write(resAllPOIsByTrack);
   response.write('</p>');
 
 
   response.write('<h2>Sixième itinéraire</h2>');
-  response.write('<h3>trackName</h3>');
+  response.write('<h3>' + resAllTrackName[5] + '</h3>');
   response.write('<p>');
   response.write(resAllPOIsByTrack);
   response.write('</p>');
 
 
   response.write('<h2>Septième itinéraire</h2>');
-  response.write('<h3>trackName</h3>');
+  response.write('<h3>' + resAllTrackName[6] + '</h3>');
   response.write('<p>');
   response.write(resAllPOIsByTrack);
   response.write('</p>');
 
 
   response.write('<h2>Huitième itinéraire</h2>');
-  response.write('<h3>trackName</h3>');
+  response.write('<h3>' + resAllTrackName[7] + '</h3>');
   response.write('<p>');
   response.write(resAllPOIsByTrack);
   response.write('</p>');
