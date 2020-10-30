@@ -40,9 +40,49 @@ graphdb.Query.query(select, (err, data) => {
 var select1 = "PREFIX : <http://cui.unige.ch/> prefix xsd: <http://www.w3.org/2001/XMLSchema#> prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> prefix cui: <http://cui.unige.ch/> select * where {?s a cui:POI. ?s :name ?o .}";
 
 graphdb.Query.query(select1, (err, data) => {
+    // console.log(data);
+    // console.log(err);
+});
+
+var select2 = "PREFIX : <http://cui.unige.ch/> prefix xsd: <http://www.w3.org/2001/XMLSchema#> prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> prefix cui: <http://cui.unige.ch/> select * where { ?s a cui:trk. ?s :name ?o. ?poi a cui:POI. ?t a cui:trkpt. ?t cui:hasClosePOI ?poi. ?s cui:trackpoints ?t. ?poi cui:lat ?lat. ?poi cui:lon ?lon. }";
+
+graphdb.Query.query(select2, (err, data) => {
     console.log(data);
     // console.log(err);
 });
+
+
+// QUERY de tous les POIs groupe par track
+// PREFIX : <http://cui.unige.ch/>
+// prefix xsd: <http://www.w3.org/2001/XMLSchema#>
+// prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+// prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+//
+// prefix cui: <http://cui.unige.ch/>
+//
+// select * where {
+// 	?s a cui:trk.
+//     ?s :name ?o.
+//     ?poi a cui:POI.
+//     ?t a cui:trkpt.
+//     ?t cui:hasClosePOI ?poi.
+//     ?s cui:trackpoints ?t.
+//
+// }
+
+//ajout lat et lon de poi
+// select * where {
+// 	?s a cui:trk.
+//     ?s :name ?o.
+//     ?poi a cui:POI.
+//     ?t a cui:trkpt.
+//     ?t cui:hasClosePOI ?poi.
+//     ?s cui:trackpoints ?t.
+//     ?poi cui:lat ?lat.
+//     ?poi cui:lon ?lon.
+//
+// }
+
 
 // QUERY DES POIs
 // PREFIX : <http://cui.unige.ch/>
