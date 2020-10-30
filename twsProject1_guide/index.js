@@ -38,8 +38,9 @@ graphdb.Query.query(select, (err, data) => {
 });
 
 var select1 = "PREFIX : <http://cui.unige.ch/> prefix xsd: <http://www.w3.org/2001/XMLSchema#> prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> prefix cui: <http://cui.unige.ch/> select * where {?s a cui:POI. ?s :name ?o .}";
-
+var essai ='';
 graphdb.Query.query(select1, (err, data) => {
+
     // console.log(data);
     // console.log(err);
 });
@@ -47,7 +48,9 @@ graphdb.Query.query(select1, (err, data) => {
 var select2 = "PREFIX : <http://cui.unige.ch/> prefix xsd: <http://www.w3.org/2001/XMLSchema#> prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> prefix cui: <http://cui.unige.ch/> select * where { ?s a cui:trk. ?s :name ?o. ?poi a cui:POI. ?t a cui:trkpt. ?t cui:hasClosePOI ?poi. ?s cui:trackpoints ?t. ?poi cui:lat ?lat. ?poi cui:lon ?lon. }";
 
 graphdb.Query.query(select2, (err, data) => {
-    console.log(data);
+    essai = data;
+    console.log(typeof(data));
+    // console.log(data);
     // console.log(err);
 });
 
@@ -108,3 +111,20 @@ graphdb.Query.query(select2, (err, data) => {
 // 	?s a cui:POI.
 //     ?s :name ?o .
 // }
+console.log('a');
+console.log(essai);
+console.log('b');
+const http = require('http');
+const server = http.createServer();
+server.listen(4000, 'localhost');
+
+server.on('request', (request, response) => {
+  const content_type = 'text/html; charset=utf-8';
+  response.setHeader('Content-Type', content_type); // (1)
+
+  response.write('<h1>Salut à toi</h1>');
+  response.write('<p>');
+  response.write(essai);
+  response.write('<p>');
+  response.end();
+});
