@@ -45,16 +45,31 @@ graphdb.Query.query(select1, (err, data) => {
     // console.log(err);
 });
 
-var select2 = "PREFIX : <http://cui.unige.ch/> prefix xsd: <http://www.w3.org/2001/XMLSchema#> prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> prefix cui: <http://cui.unige.ch/> select * where { ?s a cui:trk. ?s :name ?o. ?poi a cui:POI. ?t a cui:trkpt. ?t cui:hasClosePOI ?poi. ?s cui:trackpoints ?t. ?poi cui:lat ?lat. ?poi cui:lon ?lon. }";
+// var select2 = "PREFIX : <http://cui.unige.ch/> prefix xsd: <http://www.w3.org/2001/XMLSchema#> prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> prefix cui: <http://cui.unige.ch/> select * where { ?s a cui:trk. ?s :name ?o. ?poi a cui:POI. ?t a cui:trkpt. ?t cui:hasClosePOI ?poi. ?s cui:trackpoints ?t. ?poi cui:lat ?lat. ?poi cui:lon ?lon. }";
+//
+// graphdb.Query.query(select2, (err, data) => {
+//     essai = data;
+//     console.log(typeof(data));
+//     // console.log(data);
+//     // console.log(err);
+// });
+// var select2 = "PREFIX : <http://cui.unige.ch/> prefix xsd: <http://www.w3.org/2001/XMLSchema#> prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> prefix cui: <http://cui.unige.ch/> select * where { ?s a cui:trk. ?s :name ?o. ?poi a cui:POI. ?t a cui:trkpt. ?t cui:hasClosePOI ?poi. ?s cui:trackpoints ?t. ?poi cui:lat ?lat. ?poi cui:lon ?lon. }";
 
-graphdb.Query.query(select2, (err, data) => {
-    essai = data;
-    console.log(typeof(data));
-    // console.log(data);
-    // console.log(err);
-});
 
+async function essai1() {
+    const select2 = "PREFIX : <http://cui.unige.ch/> prefix xsd: <http://www.w3.org/2001/XMLSchema#> prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> prefix cui: <http://cui.unige.ch/> select * where { ?s a cui:trk. ?s :name ?o. ?poi a cui:POI. ?t a cui:trkpt. ?t cui:hasClosePOI ?poi. ?s cui:trackpoints ?t. ?poi cui:lat ?lat. ?poi cui:lon ?lon. }";
 
+    await graphdb.Query.query(select2, (err, data) => {
+                console.log(data[0]);
+                // const obj = JSON.parse(data)
+                // console.log(obj.poi);
+                essai += data;
+                console.log(typeof(data));
+                // console.log(data);
+            });
+            console.log(essai);
+};
+essai1().then();
 // QUERY de tous les POIs groupe par track
 // PREFIX : <http://cui.unige.ch/>
 // prefix xsd: <http://www.w3.org/2001/XMLSchema#>
@@ -112,7 +127,7 @@ graphdb.Query.query(select2, (err, data) => {
 //     ?s :name ?o .
 // }
 console.log('a');
-console.log(essai);
+// console.log(essai);
 console.log('b');
 const http = require('http');
 const server = http.createServer();
