@@ -179,8 +179,6 @@ async function getAllPOIsByTrack(trackname) {
                 }, 500);
 
 };
-
-};
 var tracksInfoArray = [];
 setTimeout(function(){
     resAllTrackName.forEach(trackname => {
