@@ -119,6 +119,7 @@ getAllTrackName().then();
 
 
 var resAllPOIsByTrack = [];
+var tracksInfoArray = [];
 var vara ='';
 var tempo ='';
 
@@ -134,11 +135,7 @@ async function getAllPOIsByTrack(trackname) {
     resAllPOIsByTrack = [];
     vara ='';
     tempo ='';
-    console.log('entree');
-    console.log(resAllPOIsByTrack);
-    console.log(vara);
-    console.log(tempo);
-    console.log(trackname);
+
     // "select ?namepoi ?lat ?lon where {" +
     var allPOIsByTrack = prefix +
         "select ?namepoi where {" +
@@ -158,79 +155,34 @@ async function getAllPOIsByTrack(trackname) {
         //
         // }, 2000);
         // await
-     await graphdb.Query.query(allPOIsByTrack, (err, data) => {
+
+    await graphdb.Query.query(allPOIsByTrack, (err, data) => {
          // console.log('salut');
          // console.log(allPOIsByTrack);
          // console.log('data');
          //        console.log(data);
-                var obj = JSON.parse(data)
-                console.log(typeof(obj));
-                console.log(trackname);
-                console.log(obj);
-                console.log(obj.results.bindings);
-                obj.results.bindings.forEach((name, a) => {
+        var obj = JSON.parse(data)
+        //console.log(typeof(obj));
+        console.log(trackname);
+        //console.log(obj);
+        //console.log(obj.results.bindings);
+        obj.results.bindings.forEach((name, a) => {
 
-                   // console.log(b.results.bindings[a].lon.value); -> pas utile pour le retour a l'utilisateur
-                   // console.log(b.results.bindings[a].namepoi.value);
-                   // console.log(b.results.bindings[a].lat.value); -> pas utile pour le retour a l'utilisateur
-                   vara = obj.results.bindings[a].namepoi.value;
-                   // console.log('vara');
-                   // console.log(vara);
-                   resAllPOIsByTrack.push(vara);
-                   // console.log('iiii');
-                   // console.log(resAllPOIsByTrack);
-                   console.log('sortie');
-                   console.log(resAllPOIsByTrack);
-                   console.log(vara);
-                   // console.log(tempo);
-                   console.log(trackname);
-                   });
-
-                // tempo += data;
-                // console.log('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
-                // console.log(typeof(tempo));
-                // console.log(tempo);
-                // const b = JSON.parse(tempo);
-                // // console.log(b);
-                // b.results.bindings.forEach((name, a) => {
-                //     // console.log(i.results.bindings[a].trk.value);
-                //     vara = b.results.bindings[a].trk.value;
-                //     resAllTrackName.push(vara);
-
-                // });
-            });
-            /*
-            *TODO: faire tableau de poi pour une track
-            */
-            // setTimeout(function(){
-            //     // console.log('tempo');
-            //     // console.log(tempo);
-            //     // console.log('tempo fini');
-            //     var b = JSON.parse(tempo);
-            //     // console.log(b);
-            //     // console.log(typeof(b));
-            //     b.results.bindings.forEach((name, a) => {
-            //
-            //        // console.log(b.results.bindings[a].lon.value); -> pas utile pour le retour a l'utilisateur
-            //        // console.log(b.results.bindings[a].namepoi.value);
-            //        // console.log(b.results.bindings[a].lat.value); -> pas utile pour le retour a l'utilisateur
-            //        vara = b.results.bindings[a].namepoi.value;
-            //        // console.log('vara');
-            //        // console.log(vara);
-            //        resAllPOIsByTrack.push(vara);
-            //        // console.log('iiii');
-            //        // console.log(resAllPOIsByTrack);
-            //        console.log('sortie');
-            //        console.log(resAllPOIsByTrack);
-            //        console.log(vara);
-            //        console.log(tempo);
-            //        console.log(trackname);
-            //        });
-            //
-            //     }, 500);
+           vara = obj.results.bindings[a].namepoi.value;
+           // console.log('vara');
+           // console.log(vara);
+           resAllPOIsByTrack.push(vara);
+           // console.log('iiii');
+           // console.log(resAllPOIsByTrack);
+           //console.log(trackname);
+        });
+        tracksInfoArray.push(resAllPOIsByTrack);
+        resAllPOIsByTrack = [];
+    });
+            //TODO: faire tableau de poi pour une track
 
 };
-var tracksInfoArray = [];
+
 setTimeout(function(){
     resAllTrackName.forEach(trackname => {
         // console.log(resAllTrackName.indexOf(trackname));
@@ -239,24 +191,20 @@ setTimeout(function(){
             setTimeout(function(){
                 // console.log('ooooo');
                 // console.log(resAllPOIsByTrack);
-                tracksInfoArray.push(resAllPOIsByTrack);
-                // resAllPOIsByTrack = [];
-                // vara ='';
-                // tempo ='';
+
+                //resAllPOIsByTrack = [];
+                //vara ='';
+                //tempo ='';
 
             }, 600);}
         );
-        // setTimeout(function(){
-        //     console.log('ooooo');
-        //     console.log(resAllPOIsByTrack);
-        //     tracksInfoArray.push(resAllPOIsByTrack);
-        //     // resAllPOIsByTrack = [];
-        //     // vara ='';
-        //     // tempo ='';
-        //
-        // }, 600);
     });
+
 }, 2000);
+
+setTimeout(function () {
+    console.log(tracksInfoArray);
+}, 4100);
 
 // getAllPOIsByTrack(resAllTrackName[0]).then()
 
@@ -287,6 +235,8 @@ server.on('request', (request, response) => {
   response.write('<h2>Second itinéraire</h2>');
   response.write('<h3>' + resAllTrackName[1] + '</h3>');
   response.write('<p>');
+  response.write(tracksInfoArray[1].reduce((a,b)=>a+' <br> '+b,''));
+  response.write('<br>');
   response.write('<a href=\"' + resultsDBpedia + '\">' + resultsDBpedia + '</a>');
   response.write('</p>');
 
