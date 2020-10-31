@@ -186,69 +186,6 @@ setTimeout(function(){
 // getAllPOIsByTrack(resAllTrackName[0]).then()
 
 
-// console.log('a');
-// console.log(resAllPOIsByTrack);
-
-// QUERY de tous les POIs groupe par track
-// PREFIX : <http://cui.unige.ch/>
-// prefix xsd: <http://www.w3.org/2001/XMLSchema#>
-// prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-// prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-//
-// prefix cui: <http://cui.unige.ch/>
-//
-// select * where {
-// 	?s a cui:trk.
-//     ?s :name ?o.
-//     ?poi a cui:POI.
-//     ?t a cui:trkpt.
-//     ?t cui:hasClosePOI ?poi.
-//     ?s cui:trackpoints ?t.
-//
-// }
-
-//ajout lat et lon de poi
-// select * where {
-// 	?s a cui:trk.
-//     ?s :name ?o.
-//     ?poi a cui:POI.
-//     ?t a cui:trkpt.
-//     ?t cui:hasClosePOI ?poi.
-//     ?s cui:trackpoints ?t.
-//     ?poi cui:lat ?lat.
-//     ?poi cui:lon ?lon.
-//
-// }
-
-
-// QUERY DES POIs
-// PREFIX : <http://cui.unige.ch/>
-// prefix xsd: <http://www.w3.org/2001/XMLSchema#>
-// prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-// prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-//
-// prefix cui: <http://cui.unige.ch/>
-//
-// select * where {
-// 	?s a cui:POI.
-// }
-
-// QUERY DES NAME DE POIs
-// PREFIX : <http://cui.unige.ch/>
-// prefix xsd: <http://www.w3.org/2001/XMLSchema#>
-// prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-// prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-//
-// prefix cui: <http://cui.unige.ch/>
-//
-// select * where {
-// 	?s a cui:POI.
-//     ?s :name ?o .
-// }
-// console.log('a');
-// // console.log(resAllPOIsByTrack);
-// console.log('b');
-
 /**
  * Affichage sur page HTML
  *
