@@ -41,11 +41,6 @@ sparqler.send( myquery, function( error, data ) {
 console.log('dbpedia query');
 console.log(myquery);
 
-
-
-
-
-
 /**
  * Query a GraphDB
  *
@@ -55,30 +50,9 @@ const prefix = "prefix xsd: <http://www.w3.org/2001/XMLSchema#> \n" +
             "prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> \n" +
             "prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> \n" +
             "prefix cui: <http://cui.unige.ch/> \n"
-            // console.log(prefix);
-
-
-// query pour récupérer tous les POIs
-const allPOIs = prefix + "select * where { ?s a cui:POI. }";
-
-graphdb.Query.query(allPOIs, (err, data) => {
-    // console.log(data);
-    // console.log(err);
-});
-
-// query pour récuperer tous les POIs et leurs noms
-const allPOIsName = prefix + "select * where {?s a cui:POI. ?s :name ?o .}";
-
-graphdb.Query.query(allPOIsName, (err, data) => {
-
-    // console.log(data);
-    // console.log(err);
-});
-
 
 
 // query pour récupérer tous les trackname
-
 const allTrackName = prefix +
     "select ?trk where {" +
 	"?s a cui:trk." +
@@ -89,54 +63,30 @@ const resAllTrackName = [];
 vari = '';
 
 async function getAllTrackName() {
-    // const allPOIsByTrack = "PREFIX : <http://cui.unige.ch/> prefix xsd: <http://www.w3.org/2001/XMLSchema#> prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> prefix cui: <http://cui.unige.ch/> select * where { ?s a cui:trk. ?s :name ?o. ?poi a cui:POI. ?t a cui:trkpt. ?t cui:hasClosePOI ?poi. ?s cui:trackpoints ?t. ?poi cui:lat ?lat. ?poi cui:lon ?lon. }";
-
     await graphdb.Query.query(allTrackName, (err, data) => {
-                // console.log(data[125]);
                 const i = JSON.parse(data);
-                // const obj = JSON.parse(data)
-                // console.log(obj.poi);
-                // resAllTrackName += data;
-                // console.log(typeof(i));
-                // console.log(i.results.bindings[1].trk.value);
+
                 i.results.bindings.forEach((name, a) => {
-                    // console.log(i.results.bindings[a].trk.value);
                     vari = i.results.bindings[a].trk.value;
                     resAllTrackName.push(vari);
 
                 });
-
-                // console.log(data);
             });
-            // console.log(resAllPOIsByTrack);
-            // return resAllTrackName;
 };
+
 getAllTrackName().then();
 
-
-
 // query pour récuperer tous les pois par track
-
-
 var resAllPOIsByTrack = [];
 var tracksInfoArray = [];
 var vara ='';
 var tempo ='';
 
-/*
-*TODO: le faire pour la liste des trackname
-*enlever lon et lat de la query
-*/
-
-
 async function getAllPOIsByTrack(trackname) {
-    // const allPOIsByTrack = "PREFIX : <http://cui.unige.ch/> prefix xsd: <http://www.w3.org/2001/XMLSchema#> prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> prefix cui: <http://cui.unige.ch/> select * where { ?s a cui:trk. ?s :name ?o. ?poi a cui:POI. ?t a cui:trkpt. ?t cui:hasClosePOI ?poi. ?s cui:trackpoints ?t. ?poi cui:lat ?lat. ?poi cui:lon ?lon. }";
-    // var trackname2 = 'Refuge Maison Vieille - Refuge Bertone';
     resAllPOIsByTrack = [];
     vara ='';
     tempo ='';
 
-    // "select ?namepoi ?lat ?lon where {" +
     var allPOIsByTrack = prefix +
         "select ?namepoi where {" +
     	"?s a cui:trk." +
@@ -149,55 +99,32 @@ async function getAllPOIsByTrack(trackname) {
         "?poi cui:lon ?lon." +
         "?poi cui:name ?namepoi" +
         "}";
-        // console.log(allPOIsByTrack);
-        // setTimeout(function(){
-        //     console.log('wait for 2000');
-        //
-        // }, 2000);
-        // await
 
     await graphdb.Query.query(allPOIsByTrack, (err, data) => {
-         // console.log('salut');
-         // console.log(allPOIsByTrack);
-         // console.log('data');
-         //        console.log(data);
         var obj = JSON.parse(data)
-        //console.log(typeof(obj));
-        console.log(trackname);
-        //console.log(obj);
-        //console.log(obj.results.bindings);
-        obj.results.bindings.forEach((name, a) => {
+        //console.log(trackname);
 
+        obj.results.bindings.forEach((name, a) => {
            vara = obj.results.bindings[a].namepoi.value;
-           // console.log('vara');
-           // console.log(vara);
            resAllPOIsByTrack.push(vara);
-           // console.log('iiii');
-           // console.log(resAllPOIsByTrack);
-           //console.log(trackname);
         });
+
         tracksInfoArray.push([trackname, resAllPOIsByTrack]);
         resAllPOIsByTrack = [];
     });
-            //TODO: faire tableau de poi pour une track
-
 };
 
+//attend pour être sur d'avoir les résultats
 setTimeout(function(){
     resAllTrackName.forEach(trackname => {
-        // console.log(resAllTrackName.indexOf(trackname));
-        // console.log(trackname);
         getAllPOIsByTrack(trackname).then();
     });
-
 }, 2000);
 
-setTimeout(function () {
-    console.log(tracksInfoArray);
-}, 4100);
-
-// getAllPOIsByTrack(resAllTrackName[0]).then()
-
+//pareil
+// setTimeout(function () {
+//     console.log(tracksInfoArray);
+// }, 4100);
 
 /**
  * Affichage sur page HTML
@@ -221,6 +148,6 @@ server.on('request', (request, response) => {
       response.write('<a href=\"' + resultsDBpedia + '\">' + resultsDBpedia + '</a>');
       response.write('</p>');
   });
-  
+
   response.end();
 });
