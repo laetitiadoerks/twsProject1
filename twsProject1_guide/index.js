@@ -171,20 +171,25 @@ async function getAllPOIsByTrack(trackname) {
                    resAllPOIsByTrack.push(vara);
                    });
 
-                }, 2000);
+                }, 500);
 
 
 
 };
-var tacksInfoArray = [];
-resAllTrackName.forEach(trackname => {
-    getAllPOIsByTrack(trackname).then();
-    setTimeout(function(){
-        tracksInfoArray.push(resAllPOIsByTrack);
-        var resAllPOIsByTrack = [];
+var tracksInfoArray = [];
+setTimeout(function(){
+    resAllTrackName.forEach(trackname => {
+        console.log(resAllTrackName.indexOf(trackname));
+        console.log(trackname);
+        getAllPOIsByTrack(trackname).then();
+        setTimeout(function(){
+            tracksInfoArray.push(resAllPOIsByTrack);
+            var resAllPOIsByTrack = [];
 
-    }, 500);
-});
+        }, 600);
+    });
+}, 2000);
+
 // getAllPOIsByTrack(resAllTrackName[0]).then()
 
 
@@ -263,7 +268,7 @@ server.on('request', (request, response) => {
   response.write('<h1>Guide touristique des alentours des Montagnes autour du Mont Blanc</h1>');
 
   response.write('<h2>Premier itinéraire</h2>');
-  response.write('<h3>' + resAllTrackName[0] + '</h3>');
+  response.write('<h3>' + tracksInfoArray + '</h3>');
   response.write('<p>');
   response.write(resAllPOIsByTrack.reduce((a,b)=>a+' \n '+b,''));
   response.write('</p>');
