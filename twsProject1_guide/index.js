@@ -221,59 +221,6 @@ server.on('request', (request, response) => {
       response.write('<a href=\"' + resultsDBpedia + '\">' + resultsDBpedia + '</a>');
       response.write('</p>');
   });
-
-
-
-  // response.write('<h2>Second itinéraire</h2>');
-  // response.write('<h3>' + resAllTrackName[1] + '</h3>');
-  // response.write('<p>');
-  // response.write(tracksInfoArray[1].reduce((a,b)=>a+' <br> '+b,''));
-  // response.write('<br>');
-  // response.write('<a href=\"' + resultsDBpedia + '\">' + resultsDBpedia + '</a>');
-  // response.write('</p>');
-
-
-  // response.write('<h2>Troisième itinéraire</h2>');
-  // response.write('<h3>' + resAllTrackName[2] + '</h3>');
-  // response.write('<p>');
-  // response.write(resAllPOIsByTrack);
-  // response.write('</p>');
-  //
-  //
-  // response.write('<h2>Qutrième itinéraire</h2>');
-  // response.write('<h3>' + resAllTrackName[3] + '</h3>');
-  // response.write('<p>');
-  // response.write(resAllPOIsByTrack);
-  // response.write('</p>');
-  //
-  //
-  // response.write('<h2>Cinquième itinéraire</h2>');
-  // response.write('<h3>' + resAllTrackName[4] + '</h3>');
-  // response.write('<p>');
-  // response.write(resAllPOIsByTrack);
-  // response.write('</p>');
-  //
-  //
-  // response.write('<h2>Sixième itinéraire</h2>');
-  // response.write('<h3>' + resAllTrackName[5] + '</h3>');
-  // response.write('<p>');
-  // response.write(resAllPOIsByTrack);
-  // response.write('</p>');
-  //
-  //
-  // response.write('<h2>Septième itinéraire</h2>');
-  // response.write('<h3>' + resAllTrackName[6] + '</h3>');
-  // response.write('<p>');
-  // response.write(resAllPOIsByTrack);
-  // response.write('</p>');
-  //
-  //
-  // response.write('<h2>Huitième itinéraire</h2>');
-  // response.write('<h3>' + resAllTrackName[7] + '</h3>');
-  // response.write('<p>');
-  // response.write(resAllPOIsByTrack);
-  // response.write('</p>');
-
-
+  
   response.end();
 });
