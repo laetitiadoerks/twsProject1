@@ -10,7 +10,6 @@ const schemeHeader = "@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .\n" +
     "@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> . \n\n" +
     "@prefix : <http://cui.unige.ch/> . \n\n"
 
-
 console.log("TWS converter");
 
 //parsage des point gpx -> des trackpt

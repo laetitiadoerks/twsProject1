@@ -33,7 +33,7 @@ npm start
 ```
 
 8 fichiers  ttl sont créés. Il faut ensuite aller les ajouter à GraphDB, dans un repository nommé tws_laetitia_valentin.
-Nous avons donc une BDD de tacks auxquelles sont parfois accroché des points d'intérêts venant d'OSM.
+Nous avons donc une BDD de tracks auxquelles sont parfois accroché des points d'intérêts venant d'OSM.
 
 ### 4 - Créer et afficher le guide touristique
 
@@ -45,4 +45,5 @@ npm start
 Et le tour est joué ! il suffit maintenant d'ouvrir un navigateur sur la page localhost:4000 afin de voir le guide !
 Celui-ci est complété par des informations récupérées sur DPpedia. Ainsi, chaque track se voit ajouter de nouveaux points d'intérêts proches.
 
-**ATTENTION :** Parfois il faut arrêter le serveur lancé par l'étape 4 et le relancer car celui-ci crash après un certains temps, pas à chaque fois.
+**ATTENTION :** Les informations peuvent prendre du temps a arriver, n'hésitez pas à recharger la page jusqu'à ce que les informations s'affichent correctement.
+Parfois il faut arrêter le serveur lancé par l'étape 4 et le relancer car celui-ci crash après un certains temps, pas à chaque fois.
