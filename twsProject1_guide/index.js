@@ -26,20 +26,43 @@ var sparqler = new sparqler.Client();
  *
  */
 
- /*
- *TODO: faire la requete dbpedia pour chaqune des tracks
- */
-
 // query sur les alentours des tracks
-var resultsDBpedia ='';
-var myquery = 'SELECT DISTINCT * WHERE { ?s geo:lat ?la . ?s geo:long ?lo . FILTER(?la>45.7970 AND ?la<45.8096 AND ?lo>6.3874 AND ?lo<6.4250) . }';
-sparqler.send( myquery, function( error, data ) {
-    // console.log( data.results.bindings[0].s.value );
-    // console.log(typeof(data.results.bindings[0]));
-    resultsDBpedia = data.results.bindings[0].s.value;
+//tableau des bounds de chaque track: [nom de la track, [latmin, latmax], [lonmin, lonmax]]
+var bounds = [["Le Môle", [46.098716, 46.11035], [6.438214, 6.457551]],
+    ["La Tournette", [45.821642, 45.832557], [6.262702, 6.28652]],
+    ["Le Mont Charvin en boucle", [45.797068, 45.809523], [6.38742, 6.42494]],
+    ["Pic de Marcelly", [46.128024, 46.139094], [6.572387, 6.59701]],
+    ["Le tour du pic du Jalouvre", [45.980146, 45.999655], [6.429688, 6.468717]],
+    ["Balcon du Léman par le Signal des Voirons", [46.189796, 46.234077], [6.33679, 6.358298]],
+    ["La Croix des 7 frères depuis Agy", [46.025684, 46.078739], [6.621539, 6.663864]],
+    ["Refuge Maison Vieille - Refuge Bertone", [45.788124, 45.808638], [6.931023, 6.985976]]];
+
+var range = 0.02; //pour agrandir la zone
+var resultsDBpedia = [];
+
+bounds.forEach(bound => {
+    var myquery = 'SELECT DISTINCT * WHERE ' +
+        '{ ?s geo:lat ?la . ?s geo:long ?lo . FILTER(' +
+        '?la>' + (bound[1][0]-range) + ' AND ' +
+        '?la<' + (bound[1][1]+range) + ' AND ' +
+        '?lo>' + (bound[2][0]-range) + ' AND ' +
+        '?lo<' + (bound[2][1]+range) + ') . }';
+
+    sparqler.send( myquery, function( error, data ) {
+
+        if(data.results.bindings[0]){
+            var dbPediaPOIArray = [];
+            data.results.bindings.forEach(dbPediaPOI =>{
+                dbPediaPOIArray.push(dbPediaPOI.s.value);
+            });
+
+            resultsDBpedia.push([bound[0], dbPediaPOIArray]);
+        }
+        else{
+            resultsDBpedia.push([bound[0], []]);
+        }
+    });
 });
-console.log('dbpedia query');
-console.log(myquery);
 
 /**
  * Query a GraphDB
@@ -102,7 +125,6 @@ async function getAllPOIsByTrack(trackname) {
 
     await graphdb.Query.query(allPOIsByTrack, (err, data) => {
         var obj = JSON.parse(data)
-        //console.log(trackname);
 
         obj.results.bindings.forEach((name, a) => {
            vara = obj.results.bindings[a].namepoi.value;
@@ -121,11 +143,6 @@ setTimeout(function(){
     });
 }, 2000);
 
-//pareil
-// setTimeout(function () {
-//     console.log(tracksInfoArray);
-// }, 4100);
-
 /**
  * Affichage sur page HTML
  *
@@ -141,11 +158,19 @@ server.on('request', (request, response) => {
   response.write('<h1>Guide touristique des alentours des Montagnes autour du Mont Blanc</h1>');
 
   tracksInfoArray.forEach(tracksInfo => {
-      response.write('<h2>Itinéraire:' + tracksInfoArray[tracksInfoArray.indexOf(tracksInfo)][0] + '</h2>');
+      response.write('<h2>Itinéraire: ' + tracksInfoArray[tracksInfoArray.indexOf(tracksInfo)][0] + '</h2>');
       response.write('<p>');
       response.write(tracksInfoArray[tracksInfoArray.indexOf(tracksInfo)][1].reduce((a,b)=>a+' <br> '+b,''));
       response.write('<br>');
-      response.write('<a href=\"' + resultsDBpedia + '\">' + resultsDBpedia + '</a>');
+      resultsDBpedia.forEach(dbPediaPOIs => {
+          if(dbPediaPOIs[0] == tracksInfoArray[tracksInfoArray.indexOf(tracksInfo)][0]){
+              dbPediaPOIs[1].forEach(POIs => {
+                  response.write('<a href=\"' + POIs + '\">' + POIs + '</a>');
+                  response.write('<br>');
+              });
+          }
+      });
+
       response.write('</p>');
   });
 

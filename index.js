@@ -29,7 +29,7 @@ function parseGPX(gpxFile) {
             time: point.child.time[0].val
             // time: Date(point.child.time[0].val)
         };
-        //console.log(parsedPoint);
+
         parsedPoints.push(parsedPoint);
     });
 
@@ -37,7 +37,6 @@ function parseGPX(gpxFile) {
 }
 //creation d'un triple par points
 function generateGraphDBPoint(point) {
-  // console.log(point);
     let pointId = ':swt-trkpt-' + uuid();
     let schemeString = pointId + ' a :trkpt . \n';
     schemeString += pointId + ' :lat ' + point.lat + ' .\n';
@@ -61,9 +60,6 @@ function generateGraphDBPoint(point) {
 }
 
 function generateGraphDBPoi(poi) {
-  // console.log('a');
-  // console.log(poi);
-  // console.log('b');
     let poiId = ':swt-poi-' + poi.id;
     let schemeString = poiId + ' a :POI . \n';
     schemeString += poiId + ' :lat ' + poi.lat + ' .\n';
@@ -89,12 +85,13 @@ function generateGraphDBScheme(gpx) {
     let trackId = ':swt-trk-' + uuid();
     let pointsScheme = '';
     let pointIds = [];
+
     gpx.trackPoints.forEach((point) => {
-      // console.log(point);
         let graphDbPoint = generateGraphDBPoint(point);
         pointsScheme += graphDbPoint.value + "\n";
         pointIds.push(graphDbPoint.id);
     });
+
     let schemeString = schemeHeader + pointsScheme + trackId + ' a :trk . \n';
     schemeString += trackId + ' :name "' + gpx.name + '" .\n';
     schemeString += ':trackpoints a rdf:Seq .\n';
@@ -103,16 +100,16 @@ function generateGraphDBScheme(gpx) {
         schemeString += trackId + ' :trackpoints ' + id + ' .\n';
     });
 
-
     return schemeString;
 }
 
 
-//
+//va chercher les infos d'OSM
 async function fetchOSMData(bounds) {
     let response = await axios.get('https://api.openstreetmap.org/api/0.6/map?bbox=' + bounds.bottomLeft.lon + ',' + bounds.bottomLeft.lat + ',' + bounds.topRight.lon + ',' + bounds.topRight.lat);
     let elements = response.data.elements;
     let filteredElements = [];
+
     if (elements) {
         elements.forEach(element => {
             if (element.type === 'node' && element.tags && (element.tags.tourism || element.tags.natural || element.tags.amenity || element.tags.sport)) {
@@ -120,13 +117,14 @@ async function fetchOSMData(bounds) {
             }
         });
     }
-    //console.log(filteredElements);
+
     return filteredElements;
 }
 
 function findBounds(points) {
     let topRightPoint = points[0];
     let bottomLeftPoint = points[1];
+
     points.forEach((point) => {
         if (point.lat >= topRightPoint.lat) {
             topRightPoint.lat = point.lat;
@@ -146,27 +144,20 @@ function findBounds(points) {
 }
 
 function linkPOIsNearTrack(points, pois) {
-  // console.log(points);
-  // console.log('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
-  // console.log(pois);
     pois.forEach(poi => {
         let nearestPoint;
         let nearestDistance = Number.MAX_VALUE;
-        // console.log(nearestDistance);
 
         points.forEach(point => {
             let distance = distanceBetweenPoints(point.lat, point.lon, poi.lat, poi.lon);
+
             if (distance < 0.5 && distance < nearestDistance) {
-              // console.log('point');
-              // console.log(point);
-              // console.log('POI');
-              // console.log(poi);
                 nearestPoint = point;
                 nearestDistance = distance;
             }
         });
+
         if (nearestPoint) {
-            // nearestPoint.poi = poi;
             if (nearestPoint.poi){
               nearestPoint.poi.push(poi);
             }
@@ -197,21 +188,23 @@ function toRad(Value) {
 }
 
 var files = ['4sDDFdd4cjA', 'btSeByOExEc', 'kmrcRbHcMpg', 'PO21QxqG2co', 'pRAjjKqHwzQ', 'rx1-4gf5lts', 'tIRn_qJSB5s', 'UAQjXL9WRKY'];
-// var files = ['4sDDFdd4cjA'];
 
 files.forEach(track => {
     fs.readFile('gpx/' + track + '.gpx', 'utf8', function (err, data) {
         if (err) {
             return console.log(err);
         }
+
         let root = parser.getTraversalObj(data, {ignoreAttributes: false});
         let parsedGpx = parseGPX(root);
         let bounds = findBounds(parsedGpx.trackPoints);
+
         fetchOSMData(bounds).then(osmPOIs => {
             linkPOIsNearTrack(parsedGpx.trackPoints, osmPOIs)
             let scheme = generateGraphDBScheme(parsedGpx);
-            console.log(files.indexOf(track));
-            console.log(bounds);
+
+            //console.log(parsedGpx.name);
+            //console.log(bounds);
             fs.writeFile('gpx' + files.indexOf(track) + '.ttl', scheme, function (err) {
                 if (err) throw err;
                 console.log('Saved!');
