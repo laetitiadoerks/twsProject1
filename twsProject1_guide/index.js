@@ -176,7 +176,7 @@ async function getAllPOIsByTrack(trackname) {
            // console.log(resAllPOIsByTrack);
            //console.log(trackname);
         });
-        tracksInfoArray.push(resAllPOIsByTrack);
+        tracksInfoArray.push([trackname, resAllPOIsByTrack]);
         resAllPOIsByTrack = [];
     });
             //TODO: faire tableau de poi pour une track
@@ -213,22 +213,24 @@ server.on('request', (request, response) => {
 
   response.write('<h1>Guide touristique des alentours des Montagnes autour du Mont Blanc</h1>');
 
-  response.write('<h2>Premier itinéraire</h2>');
-  response.write('<h3>' + resAllTrackName[0] + '</h3>');
-  response.write('<p>');
-  response.write(tracksInfoArray[0].reduce((a,b)=>a+' <br> '+b,''));
-  response.write('<br>');
-  response.write('<a href=\"' + resultsDBpedia + '\">' + resultsDBpedia + '</a>');
-  response.write('</p>');
+  tracksInfoArray.forEach(tracksInfo => {
+      response.write('<h2>Itinéraire:' + tracksInfoArray[tracksInfoArray.indexOf(tracksInfo)][0] + '</h2>');
+      response.write('<p>');
+      response.write(tracksInfoArray[tracksInfoArray.indexOf(tracksInfo)][1].reduce((a,b)=>a+' <br> '+b,''));
+      response.write('<br>');
+      response.write('<a href=\"' + resultsDBpedia + '\">' + resultsDBpedia + '</a>');
+      response.write('</p>');
+  });
 
 
-  response.write('<h2>Second itinéraire</h2>');
-  response.write('<h3>' + resAllTrackName[1] + '</h3>');
-  response.write('<p>');
-  response.write(tracksInfoArray[1].reduce((a,b)=>a+' <br> '+b,''));
-  response.write('<br>');
-  response.write('<a href=\"' + resultsDBpedia + '\">' + resultsDBpedia + '</a>');
-  response.write('</p>');
+
+  // response.write('<h2>Second itinéraire</h2>');
+  // response.write('<h3>' + resAllTrackName[1] + '</h3>');
+  // response.write('<p>');
+  // response.write(tracksInfoArray[1].reduce((a,b)=>a+' <br> '+b,''));
+  // response.write('<br>');
+  // response.write('<a href=\"' + resultsDBpedia + '\">' + resultsDBpedia + '</a>');
+  // response.write('</p>');
 
 
   // response.write('<h2>Troisième itinéraire</h2>');
