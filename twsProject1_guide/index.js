@@ -187,17 +187,7 @@ setTimeout(function(){
     resAllTrackName.forEach(trackname => {
         // console.log(resAllTrackName.indexOf(trackname));
         // console.log(trackname);
-        getAllPOIsByTrack(trackname).then(value =>{
-            setTimeout(function(){
-                // console.log('ooooo');
-                // console.log(resAllPOIsByTrack);
-
-                //resAllPOIsByTrack = [];
-                //vara ='';
-                //tempo ='';
-
-            }, 600);}
-        );
+        getAllPOIsByTrack(trackname).then();
     });
 
 }, 2000);
