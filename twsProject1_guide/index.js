@@ -276,9 +276,9 @@ server.on('request', (request, response) => {
   response.write('<h1>Guide touristique des alentours des Montagnes autour du Mont Blanc</h1>');
 
   response.write('<h2>Premier itinéraire</h2>');
-  response.write('<h3>' + tracksInfoArray + '</h3>');
+  response.write('<h3>' + resAllTrackName[0] + '</h3>');
   response.write('<p>');
-  response.write(resAllPOIsByTrack.reduce((a,b)=>a+' <br> '+b,''));
+  response.write(tracksInfoArray[0].reduce((a,b)=>a+' <br> '+b,''));
   response.write('<br>');
   response.write('<a href=\"' + resultsDBpedia + '\">' + resultsDBpedia + '</a>');
   response.write('</p>');
